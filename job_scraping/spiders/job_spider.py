@@ -1,8 +1,8 @@
 import scrapy
 
 
-class JobSpider(scrapy.Spider):
-    name = "jobspider"
+class FreePythonJobBoardSpider(scrapy.Spider):
+    name = "jb_spider"
 
     start_urls = [
         "https://pythonjobs.github.io/",
@@ -30,3 +30,36 @@ class JobSpider(scrapy.Spider):
                 "contract": contract,
                 "details": job_details,
             }
+
+
+class Indeed(scrapy.Spider):
+    name = "id_spider"
+
+    start_urls = [
+        "https://au.indeed.com/jobs?q=python",
+    ]
+
+    def parse(self, response):
+        jobs = response.css("ul.jobsearch-ResultsList li")
+
+        for job in jobs:
+            metadata = job.css("div.attribute_snippet::text").getall()
+            short_description = job.css("div.jobSnippet ul li::text").getall()
+            job_title = job.css("h2.jobTitle a span::text").get()
+            company = job.css("span.companyName::text").get()
+            location = job.css("div.companyLocation::text").get()
+
+            date_added = job.css("span.date::text").get()
+            url = job.css("a::attr(href)").get()
+
+            if job_title is not None:
+
+                yield {
+                    "job_title": job_title,
+                    "short_description": short_description,
+                    "company": company,
+                    "location": location,
+                    "date_added": date_added,
+                    "url": url,
+                    "metadata": metadata,
+                }
