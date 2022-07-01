@@ -44,9 +44,10 @@ class Indeed(scrapy.Spider):
 
         for job in jobs:
             metadata = job.css("div.attribute_snippet::text").getall()
-            short_description = job.css("div.jobSnippet ul li::text").getall()
+            short_description = job.css("div.job-snippet ul li::text").getall()
             job_title = job.css("h2.jobTitle a span::text").get()
             company = job.css("span.companyName::text").get()
+            company2 = job.css("span.companyName a::text").get()
             location = job.css("div.companyLocation::text").get()
 
             date_added = job.css("span.date::text").get()
@@ -56,10 +57,17 @@ class Indeed(scrapy.Spider):
 
                 yield {
                     "job_title": job_title,
-                    "short_description": short_description,
                     "company": company,
+                    "company2": company2,
                     "location": location,
                     "date_added": date_added,
                     "url": url,
                     "metadata": metadata,
+                    "short_description": short_description,
                 }
+
+        next_page = response.css("ul.pagination-list li")[5].css("a::attr(href)").get()
+
+        if next_page is not None:
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, self.parse)

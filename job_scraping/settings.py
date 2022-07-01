@@ -63,9 +63,12 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "job_scraping.pipelines.JobScrapingPipeline": 200,
+    "job_scraping.pipelines.JobScrapingPipeline": 100,
+    "job_scraping.pipelines.JobTitlePipeline": 200,
     "job_scraping.pipelines.MetaDataPipeline": 300,
     "job_scraping.pipelines.UrlPipeline": 400,
+    "job_scraping.pipelines.CompanyPipeline": 500,
+    "job_scraping.pipelines.JsonWritePipeline": 600,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
