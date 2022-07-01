@@ -18,7 +18,7 @@ class JobSpider(scrapy.Spider):
             job_title = job.css("h1 a::text").get()
             job_location = job_info[0]
             date_added = job_info[1]
-            role_type = job_info[2]
+            contract = job_info[2]
             company = job_info[3]
             job_details = job.css("p.detail::text").get()
 
@@ -27,6 +27,6 @@ class JobSpider(scrapy.Spider):
                 "location": job_location,
                 "date_added": date_added,
                 "company": company,
-                "role_type": role_type,
+                "contract": contract,
                 "details": job_details,
             }
