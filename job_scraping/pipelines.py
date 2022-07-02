@@ -76,7 +76,7 @@ class CompanyPipeline(object):
 
 class JsonWritePipeline(object):
     def process_item(self, item, spider):
-        jobs = json.dumps(dict(item)) + "\n"
+        jobs = json.dumps(item) + "\n"
         with open("jobs.json", "a") as f:
             f.write(jobs)
         return item
